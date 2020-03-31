@@ -1,0 +1,14 @@
+{
+  "Nevada": {
+    "north": 40000000, "south": 34000000, "east": -112000000, "west": -120000000
+  },
+  "Caucasus": {
+    "north": 46000000, "south": 41000000, "east": 30000000, "west": 46000000
+  },
+  "PersianGulf": {
+    "north": 33000000, "south": 23000000, "east": 48000000, "west": 60000000
+  },
+  "Normandy": {
+    "north": 0, "south": 0, "east": 0, "west": 0
+  }
+}

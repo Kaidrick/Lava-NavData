@@ -1,2 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-moe.ofs.addon.navdata.NavData
+moe.ofs.addon.navdata.NavData,\
+moe.ofs.addon.navdata.services.NavaidServiceImpl,\
+moe.ofs.addon.navdata.services.WaypointServiceImpl
