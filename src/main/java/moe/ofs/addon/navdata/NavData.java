@@ -2,16 +2,20 @@ package moe.ofs.addon.navdata;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import lombok.extern.slf4j.Slf4j;
 import moe.ofs.addon.navdata.domain.NavFix;
 import moe.ofs.addon.navdata.domain.Navaid;
 import moe.ofs.addon.navdata.domain.Waypoint;
+import moe.ofs.addon.navdata.gui.controllers.MainAnchorPane;
 import moe.ofs.addon.navdata.services.NavaidService;
 import moe.ofs.addon.navdata.services.WaypointService;
 import moe.ofs.backend.Plugin;
-import moe.ofs.backend.PluginClassLoader;
+import moe.ofs.backend.UTF8Control;
 import moe.ofs.backend.handlers.MissionStartObservable;
 import moe.ofs.backend.request.server.ServerDataRequest;
+import net.rgielen.fxweaver.core.FxWeaver;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -20,7 +24,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -30,17 +36,23 @@ public class NavData implements Plugin {
     private static final String name = "Navigation Data Provider";
     private static final String desc = "Provide waypoint and navaid data to other addons";
 
-    private boolean isLoaded;
-
     private final NavaidService navaidService;
     private final WaypointService waypointService;
 
-    public NavData(NavaidService navaidService, WaypointService waypointService) {
+    private final MainAnchorPane mainAnchorPane;
+
+    private Parent gui;
+
+    // autowired from spring text; bean created by lava application main method
+    private final FxWeaver fxWeaver;
+
+    public NavData(NavaidService navaidService, WaypointService waypointService, MainAnchorPane mainAnchorPane, FxWeaver fxWeaver) {
         this.navaidService = navaidService;
         this.waypointService = waypointService;
 
-        log.info(getName() + " initialized");
-        PluginClassLoader.loadedPluginSet.add(this);
+        this.mainAnchorPane = mainAnchorPane;
+
+        this.fxWeaver = fxWeaver;
     }
 
     private MissionStartObservable missionStartObservable;
@@ -61,9 +73,6 @@ public class NavData implements Plugin {
 
             filterByRegion(navaids, border).forEach(navaidService::save);
             filterByRegion(waypoints, border).forEach(waypointService::save);
-
-            navaidService.findAll().forEach(System.out::println);
-            waypointService.findAll().forEach(System.out::println);
         }
     }
 
@@ -92,15 +101,11 @@ public class NavData implements Plugin {
 
         };
         missionStartObservable.register();
-
-        isLoaded = true;
-        writeConfiguration("enabled", "true");
     }
 
     @Override
     public void unregister() {
-        isLoaded = false;
-        writeConfiguration("enabled", "false");
+        missionStartObservable.unregister();
     }
 
     @Override
@@ -114,7 +119,13 @@ public class NavData implements Plugin {
     }
 
     @Override
-    public boolean isLoaded() {
-        return false;
+    public Parent getPluginGui() throws IOException {
+        if(gui == null) {
+            System.out.println("fxWeaver = " + fxWeaver);
+            ResourceBundle resourceBundle =
+                    ResourceBundle.getBundle("MainAnchorPane", Locale.CHINA, new UTF8Control());
+            gui = fxWeaver.loadView(MainAnchorPane.class, resourceBundle);
+        }
+        return gui;
     }
 }

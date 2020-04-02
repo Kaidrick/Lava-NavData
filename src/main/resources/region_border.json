@@ -9,6 +9,6 @@
     "north": 33000000, "south": 23000000, "east": 48000000, "west": 60000000
   },
   "Normandy": {
-    "north": 0, "south": 0, "east": 0, "west": 0
+    "north": 51000000, "south": 48000000, "east": -5000000, "west": -10000000
   }
 }
