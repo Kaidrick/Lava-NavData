@@ -2,11 +2,9 @@ package moe.ofs.addon.navdata.domain;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 @Getter
 @Setter
-@ToString
 public class Navaid extends NavFix {
     // HB|BELFAST CITY|420000|0|0|195|54621136|-5871908|15|EG
 
@@ -24,4 +22,9 @@ public class Navaid extends NavFix {
 
     // should be area code
     private String nationalityCode;
+
+    @Override
+    public String toString() {
+        return getCode() + " (" + getName() + ")";
+    }
 }

@@ -8,10 +8,10 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.ofs.addon.navdata.gui.controllers.MainAnchorPane">
+<AnchorPane fx:id="containerPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.ofs.addon.navdata.gui.controllers.MainAnchorPane">
    <Accordion fx:id="accordion" prefHeight="354.0" prefWidth="592.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
      <panes>
-       <TitledPane animated="false" text="%title_navaids">
+       <TitledPane fx:id="title_navaids" animated="false" text="%title_navaids">
          <content>
            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                   <children>
@@ -20,7 +20,7 @@
                </AnchorPane>
          </content>
        </TitledPane>
-       <TitledPane animated="false" text="Waypoints">
+       <TitledPane fx:id="title_waypoints" animated="false" text="%title_waypoints">
          <content>
            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                   <children>
@@ -29,7 +29,7 @@
                </AnchorPane>
          </content>
        </TitledPane>
-       <TitledPane animated="false" text="Supplementary Data">
+       <TitledPane fx:id="title_userData" animated="false" text="%title_userData">
          <content>
            <fx:include source="UserDataTitledPane.fxml" fx:id="userDataTitledPane"/>
          </content>

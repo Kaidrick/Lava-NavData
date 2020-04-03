@@ -16,9 +16,9 @@
                     <ListView prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
                     <VBox spacing="5.0">
                         <children>
-                            <Button mnemonicParsing="false" text="Add" onAction="#testButtonFunction"/>
-                            <Button mnemonicParsing="false" text="Test" />
-                            <Button mnemonicParsing="false" text="Button" />
+                            <Button fx:id="userdata_addButton" mnemonicParsing="false" text="Add" onAction="#testButtonFunction"/>
+                            <Button fx:id="userdata_TestButton" mnemonicParsing="false" text="Test" />
+                            <Button fx:id="userdata_ButtonButton" mnemonicParsing="false" text="Button" />
                         </children>
                     </VBox>
                 </children>

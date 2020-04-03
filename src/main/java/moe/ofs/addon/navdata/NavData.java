@@ -15,6 +15,7 @@ import moe.ofs.backend.Plugin;
 import moe.ofs.backend.UTF8Control;
 import moe.ofs.backend.handlers.MissionStartObservable;
 import moe.ofs.backend.request.server.ServerDataRequest;
+import moe.ofs.backend.util.I18n;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.springframework.stereotype.Component;
 
@@ -23,10 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -108,6 +106,7 @@ public class NavData implements Plugin {
         missionStartObservable.unregister();
     }
 
+    // try to return a localized string
     @Override
     public String getName() {
         return name;
@@ -119,11 +118,25 @@ public class NavData implements Plugin {
     }
 
     @Override
+    public String getLocalizedName() {
+        ResourceBundle bundle =
+                ResourceBundle.getBundle("NavData", I18n.getLocale(), new UTF8Control());
+        return I18n.getString(bundle, name);
+    }
+
+    @Override
+    public String getLocalizedDescription() {
+        ResourceBundle bundle =
+                ResourceBundle.getBundle("NavData", I18n.getLocale(), new UTF8Control());
+        return I18n.getString(bundle, desc);
+    }
+
+    @Override
     public Parent getPluginGui() throws IOException {
         if(gui == null) {
             System.out.println("fxWeaver = " + fxWeaver);
             ResourceBundle resourceBundle =
-                    ResourceBundle.getBundle("MainAnchorPane", Locale.CHINA, new UTF8Control());
+                    ResourceBundle.getBundle("NavData", new UTF8Control());
             gui = fxWeaver.loadView(MainAnchorPane.class, resourceBundle);
         }
         return gui;

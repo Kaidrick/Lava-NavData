@@ -2,24 +2,29 @@ package moe.ofs.addon.navdata.gui.controllers;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Accordion;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import moe.ofs.addon.navdata.domain.NavFix;
 import moe.ofs.addon.navdata.domain.Navaid;
 import moe.ofs.addon.navdata.domain.Waypoint;
 import moe.ofs.addon.navdata.services.NavaidService;
 import moe.ofs.addon.navdata.services.WaypointService;
+import moe.ofs.backend.UTF8Control;
+import moe.ofs.backend.util.I18n;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.stereotype.Component;
 
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
 @Component
 @FxmlView
 public class MainAnchorPane implements Initializable {
+
+    @FXML
+    private AnchorPane containerPane;
 
     @FXML
     private Accordion accordion;
@@ -69,5 +74,12 @@ public class MainAnchorPane implements Initializable {
 
         waypointListView.getItems().clear();
         waypointListView.getItems().addAll(waypointService.findAll());
+
+        I18n.localeProperty().addListener(((observable, oldValue, newValue) -> {
+            ResourceBundle bundle =
+                    ResourceBundle.getBundle("NavData", newValue, new UTF8Control());
+
+            I18n.toPaneOrNotToPane(containerPane, bundle);
+        }));
     }
 }
