@@ -1,6 +1,9 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+moe.ofs.addon.navdata.DataManager,\
 moe.ofs.addon.navdata.gui.controllers.MainAnchorPane,\
+moe.ofs.addon.navdata.gui.controllers.UserDataCreationDialog,\
 moe.ofs.addon.navdata.gui.controllers.UserDataTitledPane,\
 moe.ofs.addon.navdata.NavData,\
 moe.ofs.addon.navdata.services.NavaidServiceImpl,\
+moe.ofs.addon.navdata.services.UserDataServiceImpl,\
 moe.ofs.addon.navdata.services.WaypointServiceImpl

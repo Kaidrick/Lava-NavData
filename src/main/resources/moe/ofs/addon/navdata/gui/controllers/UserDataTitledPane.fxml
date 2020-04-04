@@ -1,24 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="moe.ofs.addon.navdata.gui.controllers.UserDataTitledPane"
-            prefHeight="400.0" prefWidth="600.0">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.ofs.addon.navdata.gui.controllers.UserDataTitledPane">
         <children>
             <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                 <children>
-                    <ListView prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                    <ListView fx:id="navFixUserDataListView" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
                     <VBox spacing="5.0">
                         <children>
-                            <Button fx:id="userdata_addButton" mnemonicParsing="false" text="Add" onAction="#testButtonFunction"/>
-                            <Button fx:id="userdata_TestButton" mnemonicParsing="false" text="Test" />
-                            <Button fx:id="userdata_ButtonButton" mnemonicParsing="false" text="Button" />
+                            <Button fx:id="userdata_addButton" mnemonicParsing="false" onAction="#addUserData" text="Add" />
+                            <Button fx:id="userdata_removeButton" mnemonicParsing="false" onAction="#removeUserData" text="Remove" />
+                            <Button fx:id="userdata_editButton" mnemonicParsing="false" onAction="#editUserData" text="Edit" />
                         </children>
                     </VBox>
                 </children>

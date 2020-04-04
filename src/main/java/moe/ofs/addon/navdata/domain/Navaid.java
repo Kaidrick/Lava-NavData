@@ -1,10 +1,13 @@
 package moe.ofs.addon.navdata.domain;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import moe.ofs.backend.object.map.GeoPosition;
+
+import java.util.Objects;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class Navaid extends NavFix {
     // HB|BELFAST CITY|420000|0|0|195|54621136|-5871908|15|EG
 
@@ -23,8 +26,33 @@ public class Navaid extends NavFix {
     // should be area code
     private String nationalityCode;
 
+    @Builder
+    public Navaid(String code, GeoPosition position, String name, long frequency) {
+        super(code, position);
+        this.name = name;
+        this.frequency = frequency;
+    }
+
     @Override
     public String toString() {
         return getCode() + " (" + getName() + ")";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        Navaid navaid = (Navaid) o;
+
+        return Objects.equals(name, navaid.name) && super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        return result;
     }
 }
