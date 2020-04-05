@@ -32,8 +32,8 @@ public class DataParser {
             waypoint.setCode(datum[0]);
 
             GeoPosition position = new GeoPosition();
-            position.setLatitude(Long.parseLong(datum[1]));
-            position.setLongitude(Long.parseLong(datum[2]));
+            position.setLatitude(Double.parseDouble(datum[1]) / 1E6);
+            position.setLongitude(Double.parseDouble(datum[2]) / 1E6);
             waypoint.setNationalityCode(datum[3]);
 
             waypoint.setPosition(position);
@@ -59,9 +59,9 @@ public class DataParser {
             navaid.setD2(Integer.parseInt(datum[4]));
 
             GeoPosition position = new GeoPosition();
-            position.setLatitude(Long.parseLong(datum[6]));
-            position.setLongitude(Long.parseLong(datum[7]));
-            position.setAltitude(Long.parseLong(datum[8]));
+            position.setLatitude(Double.parseDouble(datum[6]) / 1E6);
+            position.setLongitude(Double.parseDouble(datum[7]) / 1E6);
+            position.setAltitude(Double.parseDouble(datum[8]));
             navaid.setPosition(position);
 
             navaid.setNationalityCode(datum[9]);

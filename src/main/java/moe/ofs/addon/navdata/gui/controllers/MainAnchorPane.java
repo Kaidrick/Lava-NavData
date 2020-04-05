@@ -2,7 +2,8 @@ package moe.ofs.addon.navdata.gui.controllers;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Accordion;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import moe.ofs.addon.navdata.domain.NavFix;
 import moe.ofs.addon.navdata.domain.Navaid;
@@ -15,8 +16,6 @@ import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.stereotype.Component;
 
 import java.net.URL;
-import java.util.Arrays;
-import java.util.List;
 import java.util.ResourceBundle;
 
 @Component
@@ -47,23 +46,19 @@ public class MainAnchorPane implements Initializable {
         this.waypointService = waypointService;
     }
 
-    public void loadStandardData(List<? extends NavFix> dataList) {
-        navaidListView.getItems().clear();
-        waypointListView.getItems().clear();
-
-        dataList.forEach(d -> {
-            if(d instanceof Navaid)
-                navaidListView.getItems().add((Navaid) d);
-            else
-                waypointListView.getItems().add((Waypoint) d);
-        });
+    public <T extends NavFix> void addToListView(T data) {
+        if(data instanceof Navaid) {
+            navaidListView.getItems().add((Navaid) data);
+        } else {
+            waypointListView.getItems().add((Waypoint) data);
+        }
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         System.out.println("initializing MainAnchorPane");
 
-        accordion.setExpandedPane(accordion.getPanes().get(0));
+        accordion.setExpandedPane(accordion.getPanes().get(2));
         accordion.expandedPaneProperty().addListener(((observable, oldValue, newValue) -> {
             if(newValue != null)
                 System.out.println("expended pane is " + newValue.getText());
@@ -74,6 +69,8 @@ public class MainAnchorPane implements Initializable {
 
         waypointListView.getItems().clear();
         waypointListView.getItems().addAll(waypointService.findAll());
+
+        // listen to service add or delete operation
 
         I18n.localeProperty().addListener(((observable, oldValue, newValue) -> {
             ResourceBundle bundle =

@@ -1,6 +1,7 @@
 package moe.ofs.addon.navdata;
 
 import javafx.scene.Parent;
+import javafx.scene.image.Image;
 import lombok.extern.slf4j.Slf4j;
 import moe.ofs.addon.navdata.gui.controllers.MainAnchorPane;
 import moe.ofs.backend.Plugin;
@@ -44,6 +45,7 @@ public class NavData implements Plugin {
             log.info(String.format("Load navigation data for %s region", regionName));
 
             try {
+                manager.unloadData();
                 manager.loadData(regionName);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -92,5 +94,10 @@ public class NavData implements Plugin {
             gui = fxWeaver.loadView(MainAnchorPane.class, resourceBundle);
         }
         return gui;
+    }
+
+    @Override
+    public Image getIcon() {
+        return new Image(getClass().getResourceAsStream("/nav-data-provider.png"));
     }
 }

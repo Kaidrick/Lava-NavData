@@ -1,14 +1,14 @@
 {
   "Nevada": {
-    "north": 40000000, "south": 34000000, "east": -112000000, "west": -120000000
+    "north": 40, "south": 34, "east": -112, "west": -120
   },
   "Caucasus": {
-    "north": 46000000, "south": 41000000, "east": 30000000, "west": 46000000
+    "north": 46, "south": 41, "east": 30, "west": 46
   },
   "PersianGulf": {
-    "north": 33000000, "south": 23000000, "east": 48000000, "west": 60000000
+    "north": 33, "south": 23, "east": 48, "west": 60
   },
   "Normandy": {
-    "north": 51000000, "south": 48000000, "east": -5000000, "west": -10000000
+    "north": 51, "south": 48, "east": -5, "west": -10
   }
 }

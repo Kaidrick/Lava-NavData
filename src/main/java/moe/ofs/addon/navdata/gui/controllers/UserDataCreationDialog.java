@@ -12,7 +12,9 @@ import moe.ofs.addon.navdata.domain.NavFix;
 import moe.ofs.addon.navdata.domain.Navaid;
 import moe.ofs.addon.navdata.domain.Waypoint;
 import moe.ofs.addon.navdata.services.UserDataService;
+import moe.ofs.backend.GeoPositions;
 import moe.ofs.backend.object.map.GeoPosition;
+import moe.ofs.backend.object.map.Orientation;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.stereotype.Component;
 
@@ -25,37 +27,35 @@ public class UserDataCreationDialog implements Initializable {
 
     private Stage stage;
 
-    @FXML
-    private DialogPane userDataCreationPane;
+    @FXML private DialogPane userDataCreationPane;
+    @FXML private TextField identificationTextField;
+    @FXML private TextField fixNameTextField;
 
-    @FXML
-    private TextField identificationTextField;
+    @FXML private TextField latitudeDegreeTextField;
+    @FXML private TextField latitudeMinuteTextField;
+    @FXML private TextField latitudeSecondTextField;
 
-    @FXML
-    private TextField fixNameTextField;
+    @FXML private TextField longitudeDegreeTextField;
+    @FXML private TextField longitudeMinuteTextField;
+    @FXML private TextField longitudeSecondTextField;
 
-    @FXML
-    private TextField latitudeTextField;
+    @FXML private TextField altitudeTextField;
 
-    @FXML
-    private TextField longitudeTextField;
+    @FXML private TextField fixPointDescriptionTextField;
 
-    @FXML
-    private TextField altitudeTextField;
+    @FXML private RadioButton dataTypeNavaidRadioButton;
+    @FXML private RadioButton dataTypeWaypointRadioButton;
+    @FXML private RadioButton dataFormatStandardRadioButton;
+    @FXML private RadioButton dataFormatPrecisionRadioButton;
 
-    @FXML
-    private TextField fixPointDescriptionTextField;
+    @FXML private ComboBox<Orientation> latitudeOrientComboBox;
+    @FXML private ComboBox<Orientation> longitudeOrientComboBox;
 
-    @FXML
-    private RadioButton dataTypeNavaidRadioButton;
 
-    @FXML
-    private RadioButton dataTypeWaypointRadioButton;
+    @FXML private Button navFixUserDataSubmitButton;
 
-    @FXML
-    private Button navFixUserDataSubmitButton;
-
-    private ToggleGroup toggleGroup = new ToggleGroup();
+    private ToggleGroup dataTypeToggleGroup = new ToggleGroup();
+    private ToggleGroup dataFormatToggleGroup = new ToggleGroup();
 
     private NavFix data;
 
@@ -80,7 +80,11 @@ public class UserDataCreationDialog implements Initializable {
 
         stage.initModality(Modality.APPLICATION_MODAL);
 
-        toggleGroup.getToggles().addAll(dataTypeNavaidRadioButton, dataTypeWaypointRadioButton);
+        dataTypeToggleGroup.getToggles().addAll(dataTypeNavaidRadioButton, dataTypeWaypointRadioButton);
+        dataFormatToggleGroup.getToggles().addAll(dataFormatStandardRadioButton, dataFormatPrecisionRadioButton);
+
+        latitudeOrientComboBox.getItems().addAll(Orientation.NORTH, Orientation.SOUTH);
+        longitudeOrientComboBox.getItems().addAll(Orientation.EAST, Orientation.WEST);
     }
 
     public void show() {
@@ -90,16 +94,35 @@ public class UserDataCreationDialog implements Initializable {
     public Stage loadData(NavFix fix) {
         data = fix;
         identificationTextField.setText(data.getCode());
-        latitudeTextField.setText(String.valueOf(data.getPosition().getLatitude()));
-        longitudeTextField.setText(String.valueOf(data.getPosition().getLongitude()));
+        fixPointDescriptionTextField.setText(data.getDescription());
+
+        String[] displays = GeoPositions.formatStringArray(data.getPosition(), false);
+
+        if(displays[0].equals("N"))
+            latitudeOrientComboBox.getSelectionModel().select(Orientation.NORTH);
+        else
+            latitudeOrientComboBox.getSelectionModel().select(Orientation.SOUTH);
+
+        latitudeDegreeTextField.setText(displays[1]);
+        latitudeMinuteTextField.setText(displays[2]);
+        latitudeSecondTextField.setText(displays[3]);
+
+        if(displays[4].equals("E"))
+            longitudeOrientComboBox.getSelectionModel().select(Orientation.EAST);
+        else
+            longitudeOrientComboBox.getSelectionModel().select(Orientation.WEST);
+
+        longitudeDegreeTextField.setText(displays[5]);
+        longitudeMinuteTextField.setText(displays[6]);
+        longitudeSecondTextField.setText(displays[7]);
 
         if(fix instanceof Navaid) {
             altitudeTextField.setText(String.valueOf(data.getPosition().getAltitude()));
             fixNameTextField.setText(((Navaid) data).getName());
 
-            toggleGroup.selectToggle(dataTypeNavaidRadioButton);
+            dataTypeToggleGroup.selectToggle(dataTypeNavaidRadioButton);
         } else {
-            toggleGroup.selectToggle(dataTypeWaypointRadioButton);
+            dataTypeToggleGroup.selectToggle(dataTypeWaypointRadioButton);
         }
 
         return stage;
@@ -112,10 +135,18 @@ public class UserDataCreationDialog implements Initializable {
             loadedDataId = data.getId();
         }
 
-        if(toggleGroup.getSelectedToggle().equals(dataTypeNavaidRadioButton)) {
-            GeoPosition geoPosition = new GeoPosition();
-            geoPosition.setLatitude(Double.parseDouble(latitudeTextField.getText()));
-            geoPosition.setLongitude(Double.parseDouble(longitudeTextField.getText()));
+        // insert orientation
+        GeoPosition geoPosition = GeoPositions.get(
+                latitudeOrientComboBox.getValue(),
+                latitudeDegreeTextField.getText(), latitudeMinuteTextField.getText(),
+                latitudeSecondTextField.getText(),
+
+                longitudeOrientComboBox.getValue(),
+                longitudeDegreeTextField.getText(), longitudeMinuteTextField.getText(),
+                longitudeSecondTextField.getText()
+        );
+
+        if(dataTypeToggleGroup.getSelectedToggle().equals(dataTypeNavaidRadioButton)) {
             geoPosition.setAltitude(Double.parseDouble(altitudeTextField.getText()));
 
             // need a converter here to convert LL(different format)/LO
@@ -123,22 +154,20 @@ public class UserDataCreationDialog implements Initializable {
                     .code(identificationTextField.getText())
                     .name(fixNameTextField.getText())
                     .position(geoPosition)
+                    .description(fixPointDescriptionTextField.getText())
                     .build();
 
         } else {
-            GeoPosition geoPosition = new GeoPosition();
-            geoPosition.setLatitude(Double.parseDouble(latitudeTextField.getText()));
-            geoPosition.setLongitude(Double.parseDouble(longitudeTextField.getText()));
-
             data = Waypoint.builder()
                     .code(identificationTextField.getText())
                     .position(geoPosition)
+                    .description(fixPointDescriptionTextField.getText())
                     .build();
         }
 
         stage.close();
 
-        if(loadedDataId > -1) {
+        if(loadedDataId > 0) {
             data.setId(loadedDataId);
             userDataTitledPane.updateInDataListView(data);
         } else {

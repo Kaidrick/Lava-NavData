@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import moe.ofs.backend.GeoPositions;
 import moe.ofs.backend.object.map.GeoPosition;
 
 @Getter
@@ -15,14 +16,14 @@ public class Waypoint extends NavFix {
     private String nationalityCode;
 
     @Builder
-    public Waypoint(String code, GeoPosition position, String nationalityCode) {
-        super(code, position);
+    public Waypoint(String code, GeoPosition position, String description, String nationalityCode) {
+        super(code, position, description);
         this.nationalityCode = nationalityCode;
     }
 
     @Override
     public String toString() {
-        return getCode() + " (" + getPosition().getLatitude() + ", " + getPosition().getLongitude() + ")";
+        return getCode() + " - " + GeoPositions.toLatLonDisplay(getPosition());
     }
 
     @Override

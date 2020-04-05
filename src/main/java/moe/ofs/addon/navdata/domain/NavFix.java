@@ -12,6 +12,8 @@ public abstract class NavFix extends BaseEntity {
     private String code;
     private GeoPosition position;
 
+    private String description;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
@@ -16,6 +17,7 @@
                             <Button fx:id="userdata_addButton" mnemonicParsing="false" onAction="#addUserData" text="Add" />
                             <Button fx:id="userdata_removeButton" mnemonicParsing="false" onAction="#removeUserData" text="Remove" />
                             <Button fx:id="userdata_editButton" mnemonicParsing="false" onAction="#editUserData" text="Edit" />
+                  <CheckBox fx:id="autoPullRefPointCheckBox" mnemonicParsing="false" prefWidth="100.0" text="Pull reference points on DCS mission start" wrapText="true" />
                         </children>
                     </VBox>
                 </children>

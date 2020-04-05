@@ -1,6 +1,7 @@
 package moe.ofs.addon.navdata.domain;
 
 import lombok.*;
+import moe.ofs.backend.GeoPositions;
 import moe.ofs.backend.object.map.GeoPosition;
 
 import java.util.Objects;
@@ -27,15 +28,15 @@ public class Navaid extends NavFix {
     private String nationalityCode;
 
     @Builder
-    public Navaid(String code, GeoPosition position, String name, long frequency) {
-        super(code, position);
+    public Navaid(String code, GeoPosition position, String description, String name, long frequency) {
+        super(code, position, description);
         this.name = name;
         this.frequency = frequency;
     }
 
     @Override
     public String toString() {
-        return getCode() + " (" + getName() + ")";
+        return getCode() + " (" + getName() + ") - " + GeoPositions.toLatLonAltDisplay(getPosition());
     }
 
     @Override

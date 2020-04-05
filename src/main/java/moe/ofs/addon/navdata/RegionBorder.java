@@ -8,8 +8,8 @@ import lombok.ToString;
 @Setter
 @ToString
 public class RegionBorder {
-    private long north;
-    private long south;
-    private long east;
-    private long west;
+    private double north;
+    private double south;
+    private double east;
+    private double west;
 }
