@@ -5,7 +5,6 @@ import com.google.gson.reflect.TypeToken;
 import moe.ofs.addon.navdata.domain.NavFix;
 import moe.ofs.addon.navdata.domain.Navaid;
 import moe.ofs.addon.navdata.domain.Waypoint;
-import moe.ofs.addon.navdata.gui.controllers.MainAnchorPane;
 import moe.ofs.addon.navdata.services.NavaidService;
 import moe.ofs.addon.navdata.services.WaypointService;
 import org.springframework.stereotype.Component;
@@ -64,4 +63,8 @@ public class DataManager {
     }
 
 
+    private void loadRefPoints() {
+        // parse data and gson to
+
+    }
 }

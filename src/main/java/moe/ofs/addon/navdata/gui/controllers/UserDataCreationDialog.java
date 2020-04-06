@@ -12,16 +12,16 @@ import moe.ofs.addon.navdata.domain.NavFix;
 import moe.ofs.addon.navdata.domain.Navaid;
 import moe.ofs.addon.navdata.domain.Waypoint;
 import moe.ofs.addon.navdata.services.UserDataService;
-import moe.ofs.backend.GeoPositions;
 import moe.ofs.backend.object.map.GeoPosition;
+import moe.ofs.backend.object.map.GeoPositions;
 import moe.ofs.backend.object.map.Orientation;
 import net.rgielen.fxweaver.core.FxmlView;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-@Component
+@Controller
 @FxmlView
 public class UserDataCreationDialog implements Initializable {
 

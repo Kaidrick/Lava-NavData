@@ -4,13 +4,17 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import moe.ofs.backend.GeoPositions;
 import moe.ofs.backend.object.map.GeoPosition;
+import moe.ofs.backend.object.map.GeoPositions;
+
+import java.io.Serializable;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class Waypoint extends NavFix {
+public class Waypoint extends NavFix implements Serializable {
+
+    static final long serialVersionUID = 4321412L;
 
     // ADALE|42853011|-86010992|K5
     private String nationalityCode;

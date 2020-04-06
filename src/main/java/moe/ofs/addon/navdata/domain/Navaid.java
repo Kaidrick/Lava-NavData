@@ -1,16 +1,19 @@
 package moe.ofs.addon.navdata.domain;
 
 import lombok.*;
-import moe.ofs.backend.GeoPositions;
 import moe.ofs.backend.object.map.GeoPosition;
+import moe.ofs.backend.object.map.GeoPositions;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class Navaid extends NavFix {
+public class Navaid extends NavFix implements Serializable {
     // HB|BELFAST CITY|420000|0|0|195|54621136|-5871908|15|EG
+    static final long serialVersionUID = 4321412L;
+
 
     /*
     * 0|0 -> NDB?

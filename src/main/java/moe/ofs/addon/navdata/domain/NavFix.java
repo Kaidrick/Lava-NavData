@@ -4,11 +4,13 @@ import lombok.*;
 import moe.ofs.backend.domain.BaseEntity;
 import moe.ofs.backend.object.map.GeoPosition;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public abstract class NavFix extends BaseEntity {
+public abstract class NavFix extends BaseEntity implements Serializable {
     private String code;
     private GeoPosition position;
 

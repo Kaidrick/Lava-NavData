@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import moe.ofs.addon.navdata.gui.controllers.MainAnchorPane;
 import moe.ofs.backend.Plugin;
 import moe.ofs.backend.UTF8Control;
+import moe.ofs.backend.Viewable;
 import moe.ofs.backend.handlers.MissionStartObservable;
 import moe.ofs.backend.request.server.ServerDataRequest;
 import moe.ofs.backend.util.I18n;
@@ -17,7 +18,7 @@ import java.util.ResourceBundle;
 
 @Slf4j
 @Component
-public class NavData implements Plugin {
+public class NavDataProvider implements Plugin, Viewable {
 
     private static final String name = "Navigation Data Provider";
     private static final String desc = "Provide waypoint and navaid data to other addons";
@@ -30,7 +31,7 @@ public class NavData implements Plugin {
     private MissionStartObservable missionStartObservable;
 
     // autowired from spring context; bean created by lava application main method
-    public NavData(DataManager manager, FxWeaver fxWeaver) {
+    public NavDataProvider(DataManager manager, FxWeaver fxWeaver) {
         this.manager = manager;
 
         this.fxWeaver = fxWeaver;
@@ -82,7 +83,8 @@ public class NavData implements Plugin {
     public String getLocalizedDescription() {
         ResourceBundle bundle =
                 ResourceBundle.getBundle("NavData", I18n.getLocale(), new UTF8Control());
-        return I18n.getString(bundle, desc);
+
+        return bundle.getString(desc);
     }
 
     @Override

@@ -17,6 +17,7 @@
                             <Button fx:id="userdata_addButton" mnemonicParsing="false" onAction="#addUserData" text="Add" />
                             <Button fx:id="userdata_removeButton" mnemonicParsing="false" onAction="#removeUserData" text="Remove" />
                             <Button fx:id="userdata_editButton" mnemonicParsing="false" onAction="#editUserData" text="Edit" />
+                  <Button mnemonicParsing="false" onAction="#getReferencePoints" text="Test RefPoints" />
                   <CheckBox fx:id="autoPullRefPointCheckBox" mnemonicParsing="false" prefWidth="100.0" text="Pull reference points on DCS mission start" wrapText="true" />
                         </children>
                     </VBox>

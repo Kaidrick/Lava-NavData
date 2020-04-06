@@ -13,26 +13,23 @@
      <panes>
        <TitledPane fx:id="title_navaids" animated="false" text="%title_navaids">
          <content>
-           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                  <children>
-                     <ListView fx:id="navaidListView" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                  </children>
-               </AnchorPane>
+           <fx:include source="NavAidsTitledPane.fxml"/>
          </content>
        </TitledPane>
        <TitledPane fx:id="title_waypoints" animated="false" text="%title_waypoints">
          <content>
-           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                  <children>
-                     <ListView fx:id="waypointListView" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                  </children>
-               </AnchorPane>
+           <fx:include source="WaypointTitledPane.fxml"/>
          </content>
        </TitledPane>
        <TitledPane fx:id="title_userData" animated="false" text="%title_userData">
          <content>
            <fx:include source="UserDataTitledPane.fxml" fx:id="userDataTitledPane"/>
          </content>
+       </TitledPane>
+       <TitledPane fx:id="title_refPoint" animated="false" text="%title_refPoint">
+           <content>
+               <fx:include source="ReferencePointDataTitledPane.fxml" fx:id="refPointTitlePane"/>
+           </content>
        </TitledPane>
      </panes>
    </Accordion>
