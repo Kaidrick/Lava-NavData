@@ -1,11 +1,15 @@
 package moe.ofs.addon.navdata.gui.controllers;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import moe.ofs.addon.navdata.services.ReferencePointService;
-import moe.ofs.backend.function.ReferencePointManager;
+import moe.ofs.backend.BackgroundTask;
+
+import moe.ofs.backend.function.refpoint.ReferencePointManager;
+import moe.ofs.backend.handlers.MissionStartObservable;
 import moe.ofs.backend.object.map.ReferencePoint;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.stereotype.Controller;
@@ -39,12 +43,22 @@ public class ReferencePointDataTitledPane implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        referencePointManager.getAll().forEach(referencePointService::save);
-        referencePointService.findAll().forEach(blueRefPointListView.getItems()::add);
+
+//         if dcs is started, pull data, otherwise do nothing
+        if(BackgroundTask.getCurrentTask().isStarted()) {
+            referencePointManager.getAll().forEach(referencePointService::save);
+            referencePointService.findAll().forEach(blueRefPointListView.getItems()::add);
+        }
+
+        MissionStartObservable missionStartObservable = theatre ->
+                Platform.runLater(() -> {
+                    referencePointService.deleteAll();
+                    blueRefPointListView.getItems().clear();
+                    redRefPointListView.getItems().clear();
+
+                    referencePointManager.getAll().forEach(referencePointService::save);
+                    referencePointService.findAll().forEach(blueRefPointListView.getItems()::add);
+        });
+        missionStartObservable.register();
     }
-
-
-    // add a few buttons here
-
-
 }
