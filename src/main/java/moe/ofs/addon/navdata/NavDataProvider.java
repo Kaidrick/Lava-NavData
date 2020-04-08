@@ -20,8 +20,8 @@ import java.util.ResourceBundle;
 @Component
 public class NavDataProvider implements Plugin, Viewable {
 
-    private static final String name = "Navigation Data Provider";
-    private static final String desc = "Provide waypoint and navaid data to other addons";
+    public static final String name = "Navigation Data Provider";
+    public static final String desc = "Provide waypoint and navaid data to other addons";
 
     private final DataManager manager;
     private final FxWeaver fxWeaver;
@@ -54,14 +54,16 @@ public class NavDataProvider implements Plugin, Viewable {
 
         };
         missionStartObservable.register();
+
+
     }
 
     @Override
     public void unregister() {
+        manager.unloadData();
         missionStartObservable.unregister();
     }
 
-    // try to return a localized string
     @Override
     public String getName() {
         return name;
@@ -90,7 +92,6 @@ public class NavDataProvider implements Plugin, Viewable {
     @Override
     public Parent getPluginGui() throws IOException {
         if(gui == null) {
-            System.out.println("fxWeaver = " + fxWeaver);
             ResourceBundle resourceBundle =
                     ResourceBundle.getBundle("NavData", new UTF8Control());
             gui = fxWeaver.loadView(MainAnchorPane.class, resourceBundle);

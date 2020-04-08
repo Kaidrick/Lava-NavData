@@ -14,7 +14,6 @@ import org.springframework.stereotype.Controller;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 @Controller
@@ -83,19 +82,8 @@ public class UserDataTitledPane implements Initializable {
                 "user_nav_fix");
     }
 
-    @FXML
-    private void getReferencePoints() {
-        //
-    }
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        if(navDataProvider.dataFileExists("user_nav_fix")) {
-            List<NavFix> navFixList = navDataProvider.readFile("user_nav_fix");
-            navFixList.forEach(navFixUserDataListView.getItems()::add);
-            navFixList.forEach(userDataService::save);
-
-            System.out.println("userDataService.findAll() = " + userDataService.findAll());
-        }
+        userDataService.findAll().forEach(navFixUserDataListView.getItems()::add);
     }
 }

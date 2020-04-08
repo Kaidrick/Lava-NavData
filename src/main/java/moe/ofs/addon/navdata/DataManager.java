@@ -2,13 +2,22 @@ package moe.ofs.addon.navdata;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import javafx.application.Platform;
 import moe.ofs.addon.navdata.domain.NavFix;
 import moe.ofs.addon.navdata.domain.Navaid;
 import moe.ofs.addon.navdata.domain.Waypoint;
+import moe.ofs.addon.navdata.gui.controllers.NavAidsTitledPane;
+import moe.ofs.addon.navdata.gui.controllers.ReferencePointDataTitledPane;
+import moe.ofs.addon.navdata.gui.controllers.WaypointTitledPane;
 import moe.ofs.addon.navdata.services.NavaidService;
+import moe.ofs.addon.navdata.services.ReferencePointService;
+import moe.ofs.addon.navdata.services.UserDataService;
 import moe.ofs.addon.navdata.services.WaypointService;
+import moe.ofs.backend.Configurable;
+import moe.ofs.backend.function.refpoint.ReferencePointManager;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,14 +28,32 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
-public class DataManager {
+public class DataManager implements Configurable {
 
     private final NavaidService navaidService;
     private final WaypointService waypointService;
+    private final ReferencePointService referencePointService;
+    private final UserDataService<NavFix> userDataService;
 
-    public DataManager(NavaidService navaidService, WaypointService waypointService) {
+    private final ReferencePointManager referencePointManager;
+
+    // controllers
+    private final NavAidsTitledPane navAidsTitledPane;
+    private final WaypointTitledPane waypointTitledPane;
+    private final ReferencePointDataTitledPane referencePointDataTitledPane;
+
+    public DataManager(NavaidService navaidService, WaypointService waypointService,
+                       ReferencePointService referencePointService, UserDataService<NavFix> userDataService, ReferencePointManager referencePointManager, NavAidsTitledPane navAidsTitledPane, WaypointTitledPane waypointTitledPane, ReferencePointDataTitledPane referencePointDataTitledPane) {
+
         this.navaidService = navaidService;
         this.waypointService = waypointService;
+        this.referencePointService = referencePointService;
+        this.userDataService = userDataService;
+        this.referencePointManager = referencePointManager;
+
+        this.navAidsTitledPane = navAidsTitledPane;
+        this.waypointTitledPane = waypointTitledPane;
+        this.referencePointDataTitledPane = referencePointDataTitledPane;
     }
 
     public void loadData(String regionName) throws IOException {
@@ -45,12 +72,45 @@ public class DataManager {
 
             filterByRegion(navaids, border).forEach(navaidService::save);
             filterByRegion(waypoints, border).forEach(waypointService::save);
+
+            Platform.runLater(() -> {
+                if(navAidsTitledPane.isInitialized()) {
+                    navaidService.findAll().forEach(navAidsTitledPane::addToListView);
+                }
+
+                if(waypointTitledPane.isInitialized()) {
+                    waypointService.findAll().forEach(waypointTitledPane::addToListView);
+                }
+            });
+
         }
+
+        referencePointManager.getAll().forEach(referencePointService::save);
+        Platform.runLater(() -> {
+            if(referencePointDataTitledPane.isInitialized()) {
+                referencePointService.findAll().forEach(referencePointDataTitledPane::addToBlueListView);
+            }
+        });
     }
 
     public void unloadData() {
         navaidService.deleteAll();
         waypointService.deleteAll();
+        referencePointService.deleteAll();
+
+        Platform.runLater(() -> {
+            if(navAidsTitledPane.isInitialized()) {
+                navAidsTitledPane.clearListView();
+            }
+
+            if(waypointTitledPane.isInitialized()) {
+                waypointTitledPane.clearListView();
+            }
+
+            if(referencePointDataTitledPane.isInitialized()) {
+                referencePointDataTitledPane.clearListViews();
+            }
+        });
     }
 
     private <T extends NavFix> List<T> filterByRegion(List<T> fixes, RegionBorder border) {
@@ -62,9 +122,16 @@ public class DataManager {
         }).collect(Collectors.toList());
     }
 
+    @PostConstruct
+    private void loadUserData() {
+        if(dataFileExists("user_nav_fix")) {
+            List<NavFix> navFixList = readFile("user_nav_fix");
+            navFixList.forEach(userDataService::save);
+        }
+    }
 
-    private void loadRefPoints() {
-        // parse data and gson to
-
+    @Override
+    public String getName() {
+        return NavDataProvider.name;
     }
 }

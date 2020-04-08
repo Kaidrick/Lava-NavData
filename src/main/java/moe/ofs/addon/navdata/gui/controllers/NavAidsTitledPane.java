@@ -6,7 +6,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import moe.ofs.addon.navdata.domain.Navaid;
 import moe.ofs.addon.navdata.services.NavaidService;
-import moe.ofs.backend.services.CrudService;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.stereotype.Controller;
 
@@ -16,6 +15,8 @@ import java.util.ResourceBundle;
 @Controller
 @FxmlView
 public class NavAidsTitledPane implements Initializable, Searchable {
+
+    private boolean initialized;
 
     private final NavaidService service;
 
@@ -37,9 +38,17 @@ public class NavAidsTitledPane implements Initializable, Searchable {
         navaidListView.getItems().clear();
     }
 
+    public boolean isInitialized() {
+        return initialized;
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        service.findAll().forEach(this::addToListView);
+
         navaidSearchTextField.textProperty()
                 .addListener(((observable, oldValue, newValue) -> search(navaidListView, newValue, service)));
+
+        initialized = true;
     }
 }

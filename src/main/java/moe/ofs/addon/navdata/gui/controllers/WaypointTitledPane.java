@@ -16,6 +16,8 @@ import java.util.ResourceBundle;
 @FxmlView
 public class WaypointTitledPane implements Initializable, Searchable {
 
+    private boolean initialized;
+
     private final WaypointService service;
 
     @FXML
@@ -36,9 +38,17 @@ public class WaypointTitledPane implements Initializable, Searchable {
         waypointListView.getItems().clear();
     }
 
+    public boolean isInitialized() {
+        return initialized;
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        service.findAll().forEach(this::addToListView);
+
         waypointSearchTextField.textProperty()
                 .addListener(((observable, oldValue, newValue) -> search(waypointListView, newValue, service)));
+
+        initialized = true;
     }
 }

@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import jfxtras.styles.jmetro.JMetro;
@@ -15,11 +16,13 @@ import moe.ofs.addon.navdata.services.UserDataService;
 import moe.ofs.backend.object.map.GeoPosition;
 import moe.ofs.backend.object.map.GeoPositions;
 import moe.ofs.backend.object.map.Orientation;
+import moe.ofs.backend.object.unitofmeasure.Length;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.stereotype.Controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.function.UnaryOperator;
 
 @Controller
 @FxmlView
@@ -27,7 +30,7 @@ public class UserDataCreationDialog implements Initializable {
 
     private Stage stage;
 
-    @FXML private DialogPane userDataCreationPane;
+    @FXML private AnchorPane userDataCreationPane;
     @FXML private TextField identificationTextField;
     @FXML private TextField fixNameTextField;
 
@@ -41,7 +44,7 @@ public class UserDataCreationDialog implements Initializable {
 
     @FXML private TextField altitudeTextField;
 
-    @FXML private TextField fixPointDescriptionTextField;
+    @FXML private TextArea fixPointDescriptionTextArea;
 
     @FXML private RadioButton dataTypeNavaidRadioButton;
     @FXML private RadioButton dataTypeWaypointRadioButton;
@@ -51,6 +54,7 @@ public class UserDataCreationDialog implements Initializable {
     @FXML private ComboBox<Orientation> latitudeOrientComboBox;
     @FXML private ComboBox<Orientation> longitudeOrientComboBox;
 
+    @FXML private ComboBox<Length> altitudeUnitComboBox;
 
     @FXML private Button navFixUserDataSubmitButton;
 
@@ -85,6 +89,46 @@ public class UserDataCreationDialog implements Initializable {
 
         latitudeOrientComboBox.getItems().addAll(Orientation.NORTH, Orientation.SOUTH);
         longitudeOrientComboBox.getItems().addAll(Orientation.EAST, Orientation.WEST);
+
+        altitudeUnitComboBox.getItems().addAll(Length.values());
+
+        dataTypeToggleGroup.selectToggle(dataTypeNavaidRadioButton);
+        dataFormatToggleGroup.selectToggle(dataFormatStandardRadioButton);
+
+        // restrict text field input
+        // numeric only
+
+        // TODO -> terrible regex pattern
+
+        // two digit numeric
+        UnaryOperator<TextFormatter.Change> latDegree = change ->
+                change.getControlNewText().matches("^[0][1-9]$|^[1-8][0-9]$|^[1-9]$|^$") ? change : null;
+
+        UnaryOperator<TextFormatter.Change> standardMinuteSecond = change ->
+                change.getControlNewText().matches("^[0][0-9]$|^[1-5][0-9]$|^[1-9]$|^$") ?
+                        change : null;
+
+        UnaryOperator<TextFormatter.Change> lonDegree = change ->
+                change.getControlNewText().matches("^[0][1-9]$|^[1-8][0-9]$|^[1][0-7][0-9]$|^[1-9]$|^$") ?
+                        change : null;
+
+        UnaryOperator<TextFormatter.Change> altRestrict = change ->
+                change.getControlNewText().matches(
+                        "^((?<!\\w)-?(?:[\\d]?|[1-9][\\d]*)(?<!\\s)(?:[.]\\d+))$" + "|" +
+                                "^([\\d]|[1-9][\\d])$" + "|" +
+                                "^-?(?:[0]|[1-9]*)\\.?$" + "|" +
+                                "^$") ?
+                        change : null;
+
+        latitudeDegreeTextField.setTextFormatter(new TextFormatter<>(latDegree));
+        latitudeMinuteTextField.setTextFormatter(new TextFormatter<>(standardMinuteSecond));
+        latitudeSecondTextField.setTextFormatter(new TextFormatter<>(standardMinuteSecond));
+
+        longitudeDegreeTextField.setTextFormatter(new TextFormatter<>(lonDegree));
+        longitudeMinuteTextField.setTextFormatter(new TextFormatter<>(standardMinuteSecond));
+        longitudeSecondTextField.setTextFormatter(new TextFormatter<>(standardMinuteSecond));
+
+        altitudeTextField.setTextFormatter(new TextFormatter<>(altRestrict));
     }
 
     public void show() {
@@ -94,7 +138,7 @@ public class UserDataCreationDialog implements Initializable {
     public Stage loadData(NavFix fix) {
         data = fix;
         identificationTextField.setText(data.getCode());
-        fixPointDescriptionTextField.setText(data.getDescription());
+        fixPointDescriptionTextArea.setText(data.getDescription());
 
         String[] displays = GeoPositions.formatStringArray(data.getPosition(), false);
 
@@ -117,6 +161,7 @@ public class UserDataCreationDialog implements Initializable {
         longitudeSecondTextField.setText(displays[7]);
 
         if(fix instanceof Navaid) {
+            System.out.println(data.getPosition().getAltitude());
             altitudeTextField.setText(String.valueOf(data.getPosition().getAltitude()));
             fixNameTextField.setText(((Navaid) data).getName());
 
@@ -154,14 +199,14 @@ public class UserDataCreationDialog implements Initializable {
                     .code(identificationTextField.getText())
                     .name(fixNameTextField.getText())
                     .position(geoPosition)
-                    .description(fixPointDescriptionTextField.getText())
+                    .description(fixPointDescriptionTextArea.getText())
                     .build();
 
         } else {
             data = Waypoint.builder()
                     .code(identificationTextField.getText())
                     .position(geoPosition)
-                    .description(fixPointDescriptionTextField.getText())
+                    .description(fixPointDescriptionTextArea.getText())
                     .build();
         }
 
