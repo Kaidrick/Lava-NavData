@@ -17,7 +17,6 @@ import moe.ofs.backend.Configurable;
 import moe.ofs.backend.function.refpoint.ReferencePointManager;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -54,6 +53,11 @@ public class DataManager implements Configurable {
         this.navAidsTitledPane = navAidsTitledPane;
         this.waypointTitledPane = waypointTitledPane;
         this.referencePointDataTitledPane = referencePointDataTitledPane;
+
+        if(dataFileExists("user_nav_fix")) {
+            List<NavFix> navFixList = readFile("user_nav_fix");
+            navFixList.forEach(userDataService::save);
+        }
     }
 
     public void loadData(String regionName) throws IOException {
@@ -82,7 +86,6 @@ public class DataManager implements Configurable {
                     waypointService.findAll().forEach(waypointTitledPane::addToListView);
                 }
             });
-
         }
 
         referencePointManager.getAll().forEach(referencePointService::save);
@@ -120,14 +123,6 @@ public class DataManager implements Configurable {
             return lat > border.getSouth() && lat < border.getNorth() &&
                     lon > border.getWest() && lon < border.getEast();
         }).collect(Collectors.toList());
-    }
-
-    @PostConstruct
-    private void loadUserData() {
-        if(dataFileExists("user_nav_fix")) {
-            List<NavFix> navFixList = readFile("user_nav_fix");
-            navFixList.forEach(userDataService::save);
-        }
     }
 
     @Override

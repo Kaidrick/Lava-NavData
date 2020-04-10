@@ -51,28 +51,28 @@
                   <Label text="Position *" />
                   <VBox spacing="15.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <HBox spacing="5.0">
+                        <HBox fx:id="latitudeHBox" spacing="5.0">
                            <children>
-                              <Label text="Longitude" />
+                              <Label text="Latitude" />
                               <ComboBox fx:id="latitudeOrientComboBox" />
                               <TextField fx:id="latitudeDegreeTextField" prefWidth="60.0" />
                               <Label text="°" />
                               <TextField fx:id="latitudeMinuteTextField" prefWidth="50.0" />
                               <Label text="'" />
                               <TextField fx:id="latitudeSecondTextField" prefWidth="50.0" />
-                              <Label text="&quot;" />
+                              <Label fx:id="latitudeSecondLabel" text="&quot;" />
                            </children>
                         </HBox>
-                        <HBox spacing="5.0">
+                        <HBox fx:id="longitudeHBox" spacing="5.0">
                            <children>
-                              <Label text="Latitude" />
+                              <Label text="Longitude" />
                               <ComboBox fx:id="longitudeOrientComboBox" />
                               <TextField fx:id="longitudeDegreeTextField" prefWidth="60.0" />
                               <Label text="°" />
                               <TextField fx:id="longitudeMinuteTextField" prefWidth="50.0" />
                               <Label text="'" />
                               <TextField fx:id="longitudeSecondTextField" prefWidth="50.0" />
-                              <Label text="&quot;" />
+                              <Label fx:id="longitudeSecondLabel" text="&quot;" />
                            </children>
                         </HBox>
                         <HBox spacing="5.0">

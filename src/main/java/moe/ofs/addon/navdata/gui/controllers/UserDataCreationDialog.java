@@ -5,6 +5,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import jfxtras.styles.jmetro.JMetro;
@@ -34,6 +35,9 @@ public class UserDataCreationDialog implements Initializable {
     @FXML private TextField identificationTextField;
     @FXML private TextField fixNameTextField;
 
+    @FXML private HBox latitudeHBox;
+    @FXML private HBox longitudeHBox;
+
     @FXML private TextField latitudeDegreeTextField;
     @FXML private TextField latitudeMinuteTextField;
     @FXML private TextField latitudeSecondTextField;
@@ -43,6 +47,9 @@ public class UserDataCreationDialog implements Initializable {
     @FXML private TextField longitudeSecondTextField;
 
     @FXML private TextField altitudeTextField;
+
+    @FXML private Label latitudeSecondLabel;
+    @FXML private Label longitudeSecondLabel;
 
     @FXML private TextArea fixPointDescriptionTextArea;
 
@@ -71,8 +78,15 @@ public class UserDataCreationDialog implements Initializable {
         this.userDataTitledPane = userDataTitledPane;
     }
 
+    private boolean listenerAdded;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // text fields to be shown depends on data precision type
+        // if using precision format, hide seconds textfield
+        // and replace text formatter
+
+
         System.out.println("init user data form dialog");
         stage = new Stage();
         Scene scene = new Scene(userDataCreationPane);
@@ -84,32 +98,17 @@ public class UserDataCreationDialog implements Initializable {
 
         stage.initModality(Modality.APPLICATION_MODAL);
 
-        dataTypeToggleGroup.getToggles().addAll(dataTypeNavaidRadioButton, dataTypeWaypointRadioButton);
-        dataFormatToggleGroup.getToggles().addAll(dataFormatStandardRadioButton, dataFormatPrecisionRadioButton);
-
-        latitudeOrientComboBox.getItems().addAll(Orientation.NORTH, Orientation.SOUTH);
-        longitudeOrientComboBox.getItems().addAll(Orientation.EAST, Orientation.WEST);
-
-        altitudeUnitComboBox.getItems().addAll(Length.values());
-
-        dataTypeToggleGroup.selectToggle(dataTypeNavaidRadioButton);
-        dataFormatToggleGroup.selectToggle(dataFormatStandardRadioButton);
-
         // restrict text field input
-        // numeric only
-
         // TODO -> terrible regex pattern
-
-        // two digit numeric
         UnaryOperator<TextFormatter.Change> latDegree = change ->
-                change.getControlNewText().matches("^[0][1-9]$|^[1-8][0-9]$|^[1-9]$|^$") ? change : null;
+                change.getControlNewText().matches("^[0][0-9]?$|^[1-8][0-9]$|^[1-9]$|^$") ? change : null;
 
         UnaryOperator<TextFormatter.Change> standardMinuteSecond = change ->
-                change.getControlNewText().matches("^[0][0-9]$|^[1-5][0-9]$|^[1-9]$|^$") ?
+                change.getControlNewText().matches("^[0][0-9]?$|^[1-5][0-9]$|^[1-9]$|^$") ?
                         change : null;
 
         UnaryOperator<TextFormatter.Change> lonDegree = change ->
-                change.getControlNewText().matches("^[0][1-9]$|^[1-8][0-9]$|^[1][0-7][0-9]$|^[1-9]$|^$") ?
+                change.getControlNewText().matches("^[0][0-9]?$|^[1-8][0-9]$|^[1][0-7][0-9]$|^[1-9]$|^$") ?
                         change : null;
 
         UnaryOperator<TextFormatter.Change> altRestrict = change ->
@@ -120,19 +119,85 @@ public class UserDataCreationDialog implements Initializable {
                                 "^$") ?
                         change : null;
 
+        UnaryOperator<TextFormatter.Change> precisionMinute = change ->
+                change.getControlNewText().matches(
+                        "^((?<!\\w)(?:[\\d]?|[1-9][\\d]*)(?<!\\s)(?:[.]\\d+))$" + "|" +
+                                "^([\\d]|[1-9][\\d])$" + "|" +
+                                "^(?:[0]|[1-9]*)\\.?$" + "|" +
+                                "^$") ?
+                        change : null;
+
+        dataTypeToggleGroup.getToggles().addAll(dataTypeNavaidRadioButton, dataTypeWaypointRadioButton);
+        dataFormatToggleGroup.getToggles().addAll(dataFormatStandardRadioButton, dataFormatPrecisionRadioButton);
+
+        latitudeOrientComboBox.getItems().addAll(Orientation.NORTH, Orientation.SOUTH);
+        longitudeOrientComboBox.getItems().addAll(Orientation.EAST, Orientation.WEST);
+
+        altitudeUnitComboBox.getItems().addAll(Length.values());
+
         latitudeDegreeTextField.setTextFormatter(new TextFormatter<>(latDegree));
-        latitudeMinuteTextField.setTextFormatter(new TextFormatter<>(standardMinuteSecond));
         latitudeSecondTextField.setTextFormatter(new TextFormatter<>(standardMinuteSecond));
 
         longitudeDegreeTextField.setTextFormatter(new TextFormatter<>(lonDegree));
-        longitudeMinuteTextField.setTextFormatter(new TextFormatter<>(standardMinuteSecond));
         longitudeSecondTextField.setTextFormatter(new TextFormatter<>(standardMinuteSecond));
 
         altitudeTextField.setTextFormatter(new TextFormatter<>(altRestrict));
+
+        if(!listenerAdded) {
+            listenerAdded = true;
+
+            dataFormatToggleGroup.selectedToggleProperty().addListener(((observable) -> {
+
+                // standard dd mm ss format
+                if(dataFormatToggleGroup.getSelectedToggle().equals(dataFormatStandardRadioButton)) {
+                    // if not in, add
+                    // if already in, do nothing
+                    if(!latitudeHBox.getChildren().contains(latitudeSecondTextField) &&
+                            !latitudeHBox.getChildren().contains(latitudeSecondLabel)) {
+
+                        latitudeMinuteTextField.setPrefWidth(latitudeMinuteTextField.getPrefWidth() -
+                                latitudeSecondTextField.getPrefWidth());
+                        latitudeHBox.getChildren().addAll(latitudeSecondTextField, latitudeSecondLabel);
+                    }
+
+                    if(!longitudeHBox.getChildren().contains(longitudeSecondTextField) &&
+                            !longitudeHBox.getChildren().contains(longitudeSecondLabel)) {
+
+                        longitudeMinuteTextField.setPrefWidth(longitudeMinuteTextField.getPrefWidth() -
+                                longitudeSecondTextField.getPrefWidth());
+                        longitudeHBox.getChildren().addAll(longitudeSecondTextField, longitudeSecondLabel);
+                    }
+
+                    latitudeMinuteTextField.setTextFormatter(new TextFormatter<>(standardMinuteSecond));
+                    longitudeMinuteTextField.setTextFormatter(new TextFormatter<>(standardMinuteSecond));
+                }
+                // precision dd mm.mmm format
+                else {
+                    latitudeHBox.getChildren().removeAll(latitudeSecondTextField, latitudeSecondLabel);
+                    longitudeHBox.getChildren().removeAll(longitudeSecondTextField, longitudeSecondLabel);
+
+                    latitudeMinuteTextField.setTextFormatter(new TextFormatter<>(precisionMinute));
+                    longitudeMinuteTextField.setTextFormatter(new TextFormatter<>(precisionMinute));
+
+                    latitudeMinuteTextField.setPrefWidth(latitudeMinuteTextField.getPrefWidth() +
+                            latitudeSecondTextField.getPrefWidth());
+                    longitudeMinuteTextField.setPrefWidth(longitudeMinuteTextField.getPrefWidth() +
+                            longitudeSecondTextField.getPrefWidth());
+                }
+            }));
+        }
+
+        dataTypeToggleGroup.selectToggle(dataTypeNavaidRadioButton);
+        dataFormatToggleGroup.selectToggle(dataFormatStandardRadioButton);
     }
+
 
     public void show() {
         stage.show();
+    }
+
+    public Stage getStage() {
+        return stage;
     }
 
     public Stage loadData(NavFix fix) {
@@ -181,15 +246,33 @@ public class UserDataCreationDialog implements Initializable {
         }
 
         // insert orientation
-        GeoPosition geoPosition = GeoPositions.get(
-                latitudeOrientComboBox.getValue(),
-                latitudeDegreeTextField.getText(), latitudeMinuteTextField.getText(),
-                latitudeSecondTextField.getText(),
+        GeoPosition geoPosition;
+        if(dataFormatToggleGroup.getSelectedToggle().equals(dataFormatStandardRadioButton)) {
+            geoPosition = GeoPositions.get(
+                    latitudeOrientComboBox.getValue(),
+                    latitudeDegreeTextField.getText(),
+                    latitudeMinuteTextField.getText(),
+                    latitudeSecondTextField.getText(),
 
-                longitudeOrientComboBox.getValue(),
-                longitudeDegreeTextField.getText(), longitudeMinuteTextField.getText(),
-                longitudeSecondTextField.getText()
-        );
+                    longitudeOrientComboBox.getValue(),
+                    longitudeDegreeTextField.getText(),
+                    longitudeMinuteTextField.getText(),
+                    longitudeSecondTextField.getText()
+            );
+        } else {
+            geoPosition = GeoPositions.get(
+                    latitudeOrientComboBox.getValue(),
+                    latitudeDegreeTextField.getText(),
+                    latitudeMinuteTextField.getText(),
+                    "0",
+
+                    longitudeOrientComboBox.getValue(),
+                    longitudeDegreeTextField.getText(),
+                    longitudeMinuteTextField.getText(),
+                    "0"
+            );
+        }
+
 
         if(dataTypeToggleGroup.getSelectedToggle().equals(dataTypeNavaidRadioButton)) {
             geoPosition.setAltitude(Double.parseDouble(altitudeTextField.getText()));
