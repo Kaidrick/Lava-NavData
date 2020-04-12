@@ -14,46 +14,46 @@
 
 <AnchorPane fx:id="userDataCreationPane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.ofs.addon.navdata.gui.controllers.UserDataCreationDialog">
    <children>
-      <VBox spacing="5.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox fx:id="mainVBox" spacing="5.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label text="NavFix entry form">
+            <Label fx:id="navfix_create_title" text="NavFix entry form">
                <font>
                   <Font size="18.0" />
                </font></Label>
             <HBox spacing="10.0">
                <children>
-                  <Label text="Data Type" />
+                  <Label fx:id="dateTypeLabel" text="Data Type" />
                   <RadioButton fx:id="dataTypeNavaidRadioButton" mnemonicParsing="false" text="Navaid" />
                   <RadioButton fx:id="dataTypeWaypointRadioButton" mnemonicParsing="false" text="Waypoint" />
                </children>
             </HBox>
             <HBox spacing="10.0">
                <children>
-                  <Label text="Format" />
+                  <Label fx:id="dataFormatLabel" text="Format" />
                   <RadioButton fx:id="dataFormatStandardRadioButton" mnemonicParsing="false" text="Standard" />
                   <RadioButton fx:id="dataFormatPrecisionRadioButton" mnemonicParsing="false" text="Precision" />
                </children>
             </HBox>
             <HBox spacing="10.0">
                <children>
-                  <Label text="Identification *" />
+                  <Label fx:id="identLabel" text="Identification *" />
                   <TextField fx:id="identificationTextField" />
                </children>
             </HBox>
-            <HBox layoutX="20.0" layoutY="20.0" spacing="5.0">
+            <HBox fx:id="fixNameHBox" layoutX="20.0" layoutY="20.0" spacing="5.0">
                <children>
-                  <Label text="Fix Name *" />
+                  <Label fx:id="fixNameLabel" text="Fix Name *" />
                   <TextField fx:id="fixNameTextField" HBox.hgrow="ALWAYS" />
                </children>
             </HBox>
             <HBox spacing="5.0">
                <children>
-                  <Label text="Position *" />
-                  <VBox spacing="15.0" HBox.hgrow="ALWAYS">
+                  <Label fx:id="positionLabel" text="Position *" />
+                  <VBox fx:id="positionVBox" spacing="15.0" HBox.hgrow="ALWAYS">
                      <children>
                         <HBox fx:id="latitudeHBox" spacing="5.0">
                            <children>
-                              <Label text="Latitude" />
+                              <Label fx:id="latitudeLabel" text="Latitude" />
                               <ComboBox fx:id="latitudeOrientComboBox" />
                               <TextField fx:id="latitudeDegreeTextField" prefWidth="60.0" />
                               <Label text="°" />
@@ -65,7 +65,7 @@
                         </HBox>
                         <HBox fx:id="longitudeHBox" spacing="5.0">
                            <children>
-                              <Label text="Longitude" />
+                              <Label fx:id="longitudeLabel" text="Longitude" />
                               <ComboBox fx:id="longitudeOrientComboBox" />
                               <TextField fx:id="longitudeDegreeTextField" prefWidth="60.0" />
                               <Label text="°" />
@@ -75,9 +75,9 @@
                               <Label fx:id="longitudeSecondLabel" text="&quot;" />
                            </children>
                         </HBox>
-                        <HBox spacing="5.0">
+                        <HBox fx:id="altitudeHBox" spacing="5.0">
                            <children>
-                              <Label text="Altitude" />
+                              <Label fx:id="altitudeLabel" text="Altitude" />
                               <TextField fx:id="altitudeTextField" prefWidth="100.0" />
                               <ComboBox fx:id="altitudeUnitComboBox" />
                            </children>
@@ -88,7 +88,7 @@
             </HBox>
             <HBox layoutX="20.0" layoutY="120.0" spacing="5.0" VBox.vgrow="ALWAYS">
                <children>
-                  <Label text="Description" />
+                  <Label fx:id="descriptionLabel" text="Description" />
                   <TextArea fx:id="fixPointDescriptionTextArea" prefWidth="200.0" HBox.hgrow="ALWAYS" />
                </children>
             </HBox>

@@ -6,18 +6,22 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import jfxtras.styles.jmetro.JMetro;
 import jfxtras.styles.jmetro.Style;
+import moe.ofs.addon.navdata.NavDataProvider;
 import moe.ofs.addon.navdata.domain.NavFix;
 import moe.ofs.addon.navdata.domain.Navaid;
 import moe.ofs.addon.navdata.domain.Waypoint;
 import moe.ofs.addon.navdata.services.UserDataService;
+import moe.ofs.backend.UTF8Control;
 import moe.ofs.backend.object.map.GeoPosition;
 import moe.ofs.backend.object.map.GeoPositions;
 import moe.ofs.backend.object.map.Orientation;
 import moe.ofs.backend.object.unitofmeasure.Length;
+import moe.ofs.backend.util.I18n;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.stereotype.Controller;
 
@@ -31,7 +35,15 @@ public class UserDataCreationDialog implements Initializable {
 
     private Stage stage;
 
+    private final NavDataProvider navDataProvider;
+
     @FXML private AnchorPane userDataCreationPane;
+    @FXML private VBox mainVBox;
+    @FXML private HBox fixNameHBox;
+
+    @FXML private VBox positionVBox;
+    @FXML private HBox altitudeHBox;
+
     @FXML private TextField identificationTextField;
     @FXML private TextField fixNameTextField;
 
@@ -73,7 +85,8 @@ public class UserDataCreationDialog implements Initializable {
     private final UserDataService<NavFix> userDataService;
     private final UserDataTitledPane userDataTitledPane;
 
-    public UserDataCreationDialog(UserDataService<NavFix> userDataService, UserDataTitledPane userDataTitledPane) {
+    public UserDataCreationDialog(NavDataProvider navDataProvider, UserDataService<NavFix> userDataService, UserDataTitledPane userDataTitledPane) {
+        this.navDataProvider = navDataProvider;
         this.userDataService = userDataService;
         this.userDataTitledPane = userDataTitledPane;
     }
@@ -86,10 +99,10 @@ public class UserDataCreationDialog implements Initializable {
         // if using precision format, hide seconds textfield
         // and replace text formatter
 
-
         System.out.println("init user data form dialog");
         stage = new Stage();
         Scene scene = new Scene(userDataCreationPane);
+        stage.getIcons().add(navDataProvider.getIcon());
 
         JMetro jMetro = new JMetro(Style.LIGHT);
         jMetro.setScene(scene);
@@ -133,7 +146,7 @@ public class UserDataCreationDialog implements Initializable {
         latitudeOrientComboBox.getItems().addAll(Orientation.NORTH, Orientation.SOUTH);
         longitudeOrientComboBox.getItems().addAll(Orientation.EAST, Orientation.WEST);
 
-        altitudeUnitComboBox.getItems().addAll(Length.values());
+        altitudeUnitComboBox.getItems().addAll(Length.METERS, Length.FEET);
 
         latitudeDegreeTextField.setTextFormatter(new TextFormatter<>(latDegree));
         latitudeSecondTextField.setTextFormatter(new TextFormatter<>(standardMinuteSecond));
@@ -146,6 +159,7 @@ public class UserDataCreationDialog implements Initializable {
         if(!listenerAdded) {
             listenerAdded = true;
 
+            // data format
             dataFormatToggleGroup.selectedToggleProperty().addListener(((observable) -> {
 
                 // standard dd mm ss format
@@ -168,6 +182,8 @@ public class UserDataCreationDialog implements Initializable {
                         longitudeHBox.getChildren().addAll(longitudeSecondTextField, longitudeSecondLabel);
                     }
 
+
+
                     latitudeMinuteTextField.setTextFormatter(new TextFormatter<>(standardMinuteSecond));
                     longitudeMinuteTextField.setTextFormatter(new TextFormatter<>(standardMinuteSecond));
                 }
@@ -176,19 +192,48 @@ public class UserDataCreationDialog implements Initializable {
                     latitudeHBox.getChildren().removeAll(latitudeSecondTextField, latitudeSecondLabel);
                     longitudeHBox.getChildren().removeAll(longitudeSecondTextField, longitudeSecondLabel);
 
-                    latitudeMinuteTextField.setTextFormatter(new TextFormatter<>(precisionMinute));
-                    longitudeMinuteTextField.setTextFormatter(new TextFormatter<>(precisionMinute));
-
                     latitudeMinuteTextField.setPrefWidth(latitudeMinuteTextField.getPrefWidth() +
                             latitudeSecondTextField.getPrefWidth());
                     longitudeMinuteTextField.setPrefWidth(longitudeMinuteTextField.getPrefWidth() +
                             longitudeSecondTextField.getPrefWidth());
+
+                    latitudeMinuteTextField.setTextFormatter(new TextFormatter<>(precisionMinute));
+                    longitudeMinuteTextField.setTextFormatter(new TextFormatter<>(precisionMinute));
                 }
             }));
+
+            final int fixNameIndex = mainVBox.getChildren().indexOf(fixNameHBox);
+            // data type
+            dataTypeToggleGroup.selectedToggleProperty().addListener((observable -> {
+                if(dataTypeToggleGroup.getSelectedToggle().equals(dataTypeNavaidRadioButton)) {
+                    if(!mainVBox.getChildren().contains(fixNameHBox)) {
+                        mainVBox.getChildren().add(fixNameIndex, fixNameHBox);
+                    }
+
+                    if(!positionVBox.getChildren().contains(altitudeHBox)) {
+                        positionVBox.getChildren().add(altitudeHBox);
+                    }
+                } else {
+                    mainVBox.getChildren().remove(fixNameHBox);
+                    positionVBox.getChildren().remove(altitudeHBox);
+                }
+            }));
+
         }
 
         dataTypeToggleGroup.selectToggle(dataTypeNavaidRadioButton);
         dataFormatToggleGroup.selectToggle(dataFormatStandardRadioButton);
+
+
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("NavData",
+                I18n.getLocale(), new UTF8Control());
+        I18n.toPaneOrNotToPane(userDataCreationPane, resourceBundle);
+
+//        // register to i18n change event
+//        I18n.localeProperty().addListener((observable -> {
+//            ResourceBundle resourceBundle = ResourceBundle.getBundle("NavData");
+//            I18n.toPaneOrNotToPane(userDataCreationPane, resourceBundle);
+//        }));
     }
 
 
@@ -204,6 +249,8 @@ public class UserDataCreationDialog implements Initializable {
         data = fix;
         identificationTextField.setText(data.getCode());
         fixPointDescriptionTextArea.setText(data.getDescription());
+
+        altitudeUnitComboBox.getSelectionModel().select(Length.FEET);
 
         String[] displays = GeoPositions.formatStringArray(data.getPosition(), false);
 
@@ -243,6 +290,18 @@ public class UserDataCreationDialog implements Initializable {
         long loadedDataId = -1;
         if(data != null) {
             loadedDataId = data.getId();
+        }
+
+        if(!validateInputData()) {
+            // get a dialog showing error message? or use something for error message
+            ResourceBundle bundle = ResourceBundle.getBundle("NavData", I18n.getLocale(), new UTF8Control());
+            Alert alert = new Alert(Alert.AlertType.ERROR, I18n.getString(bundle,
+                    "nav_fix_entry_incomplete_data"), ButtonType.OK);
+            alert.initOwner(stage);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.showAndWait();
+
+            return;
         }
 
         // insert orientation
@@ -306,6 +365,52 @@ public class UserDataCreationDialog implements Initializable {
         data = null;
 
         System.out.println("userDataService = " + userDataService.findAll());
+    }
+
+    private boolean validateInputData() {
+        // check mode
+        // if standard
+        //      if waypoint -> alt and fix name can be empty
+        //      if navaid -> everything must be filled up
+        // if precision
+        //      if waypoint -> alt, fix name and lat/lon seconds can be empty
+        //      if navaid -> lat/lon seconds can be empty
+
+        boolean commonCheck = !identificationTextField.getText().equals("") &&
+                latitudeOrientComboBox.getSelectionModel().getSelectedItem() != null &&
+                longitudeOrientComboBox.getSelectionModel().getSelectedItem() != null &&
+
+                !latitudeDegreeTextField.getText().equals("") &&
+                !latitudeMinuteTextField.getText().equals("") &&
+
+                !longitudeDegreeTextField.getText().equals("") &&
+                !longitudeMinuteTextField.getText().equals("");
+
+        if(dataFormatToggleGroup.getSelectedToggle().equals(dataFormatStandardRadioButton)) {
+            if(dataTypeToggleGroup.getSelectedToggle().equals(dataTypeWaypointRadioButton)) {
+                return commonCheck &&
+                        !latitudeSecondTextField.getText().equals("") &&
+                        !longitudeSecondTextField.getText().equals("");
+
+            } else {
+                return commonCheck &&
+                        !fixNameTextField.getText().equals("") &&
+                        !altitudeTextField.getText().equals("") &&
+                        altitudeUnitComboBox.getSelectionModel().getSelectedItem() != null &&
+
+                        !latitudeSecondTextField.getText().equals("") &&
+                        !longitudeSecondTextField.getText().equals("");
+            }
+        } else {
+            if(dataTypeToggleGroup.getSelectedToggle().equals(dataTypeWaypointRadioButton)) {
+                return commonCheck;
+            } else {
+                return commonCheck &&
+                        !fixNameTextField.getText().equals("") &&
+                        !altitudeTextField.getText().equals("") &&
+                        altitudeUnitComboBox.getSelectionModel().getSelectedItem() != null;
+            }
+        }
     }
 
 }

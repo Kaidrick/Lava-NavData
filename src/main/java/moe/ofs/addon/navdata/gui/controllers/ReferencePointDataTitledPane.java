@@ -5,7 +5,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import moe.ofs.addon.navdata.services.ReferencePointService;
+import moe.ofs.backend.UTF8Control;
 import moe.ofs.backend.object.map.ReferencePoint;
+import moe.ofs.backend.util.I18n;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.stereotype.Controller;
 
