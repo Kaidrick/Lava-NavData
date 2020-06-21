@@ -3,14 +3,13 @@ package moe.ofs.addon.navdata.gui.controllers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.ListView;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import moe.ofs.addon.navdata.NavDataProvider;
 import moe.ofs.addon.navdata.domain.NavFix;
 import moe.ofs.addon.navdata.services.UserDataService;
 import moe.ofs.backend.domain.BaseEntity;
-import moe.ofs.backend.interaction.PluginStage;
 import moe.ofs.backend.interaction.StageControl;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
@@ -41,9 +40,12 @@ public class UserDataTitledPane implements Initializable {
 
     @FXML
     private void addUserData(ActionEvent actionEvent) {
+        Node source = (Node) actionEvent.getSource();
+        Stage parent  = (Stage) source.getScene().getWindow();
+
         // make controller responsible for opening new stage
         Stage stage = fxWeaver.loadController(UserDataCreationDialog.class).getStage();
-        StageControl.showOnParentCenter(stage, PluginStage.stageMap.get(navDataProvider.getName()));
+        StageControl.showOnParentCenter(stage, parent);
     }
 
     @FXML
@@ -53,10 +55,13 @@ public class UserDataTitledPane implements Initializable {
 
     @FXML
     private void editUserData(ActionEvent actionEvent) {
+        Node source = (Node) actionEvent.getSource();
+        Stage parent  = (Stage) source.getScene().getWindow();
+
         NavFix fix = navFixUserDataListView.getSelectionModel().getSelectedItem();
         if (fix != null) {
             Stage stage = fxWeaver.loadController(UserDataCreationDialog.class).loadData(fix);
-            StageControl.showOnParentCenter(stage, PluginStage.stageMap.get(navDataProvider.getName()));
+            StageControl.showOnParentCenter(stage, parent);
         }
     }
 

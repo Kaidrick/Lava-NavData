@@ -8,6 +8,7 @@ moe.ofs.addon.navdata.gui.controllers.UserDataTitledPane,\
 moe.ofs.addon.navdata.gui.controllers.WaypointTitledPane,\
 moe.ofs.addon.navdata.NavDataProvider,\
 moe.ofs.addon.navdata.services.NavaidServiceImpl,\
+moe.ofs.addon.navdata.services.NavFixSearchServiceImpl,\
 moe.ofs.addon.navdata.services.ReferencePointServiceImpl,\
 moe.ofs.addon.navdata.services.UserDataServiceImpl,\
 moe.ofs.addon.navdata.services.WaypointServiceImpl
