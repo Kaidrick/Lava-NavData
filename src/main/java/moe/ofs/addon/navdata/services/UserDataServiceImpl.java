@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 public class UserDataServiceImpl<T extends NavFix> extends AbstractMapService<T> implements UserDataService<T> {
     @Override
     public List<T> findAllByCode(String code) {
-        return map.values().stream().filter(navfix ->
+        return findAll().stream().filter(navfix ->
                 navfix.getCode().equals(code)).collect(Collectors.toList());
     }
 

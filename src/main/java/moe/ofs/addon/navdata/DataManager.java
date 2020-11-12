@@ -2,13 +2,9 @@ package moe.ofs.addon.navdata;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import javafx.application.Platform;
 import moe.ofs.addon.navdata.domain.NavFix;
 import moe.ofs.addon.navdata.domain.Navaid;
 import moe.ofs.addon.navdata.domain.Waypoint;
-import moe.ofs.addon.navdata.gui.controllers.NavAidsTitledPane;
-import moe.ofs.addon.navdata.gui.controllers.ReferencePointDataTitledPane;
-import moe.ofs.addon.navdata.gui.controllers.WaypointTitledPane;
 import moe.ofs.addon.navdata.services.NavaidService;
 import moe.ofs.addon.navdata.services.ReferencePointService;
 import moe.ofs.addon.navdata.services.UserDataService;
@@ -37,12 +33,12 @@ public class DataManager implements Configurable {
     private final ReferencePointManager referencePointManager;
 
     // controllers
-    private final NavAidsTitledPane navAidsTitledPane;
-    private final WaypointTitledPane waypointTitledPane;
-    private final ReferencePointDataTitledPane referencePointDataTitledPane;
 
     public DataManager(NavaidService navaidService, WaypointService waypointService,
-                       ReferencePointService referencePointService, UserDataService<NavFix> userDataService, ReferencePointManager referencePointManager, NavAidsTitledPane navAidsTitledPane, WaypointTitledPane waypointTitledPane, ReferencePointDataTitledPane referencePointDataTitledPane) {
+                       ReferencePointService referencePointService,
+                       UserDataService<NavFix> userDataService,
+                       ReferencePointManager referencePointManager
+                       ) {
 
         this.navaidService = navaidService;
         this.waypointService = waypointService;
@@ -50,9 +46,6 @@ public class DataManager implements Configurable {
         this.userDataService = userDataService;
         this.referencePointManager = referencePointManager;
 
-        this.navAidsTitledPane = navAidsTitledPane;
-        this.waypointTitledPane = waypointTitledPane;
-        this.referencePointDataTitledPane = referencePointDataTitledPane;
 
         if(dataFileExists("user_nav_fix")) {
             List<NavFix> navFixList = readFile("user_nav_fix");
@@ -77,43 +70,16 @@ public class DataManager implements Configurable {
             filterByRegion(navaids, border).forEach(navaidService::save);
             filterByRegion(waypoints, border).forEach(waypointService::save);
 
-            Platform.runLater(() -> {
-                if(navAidsTitledPane.isInitialized()) {
-                    navaidService.findAll().forEach(navAidsTitledPane::addToListView);
-                }
-
-                if(waypointTitledPane.isInitialized()) {
-                    waypointService.findAll().forEach(waypointTitledPane::addToListView);
-                }
-            });
         }
 
         referencePointManager.getAll().forEach(referencePointService::save);
-        Platform.runLater(() -> {
-            if(referencePointDataTitledPane.isInitialized()) {
-                referencePointService.findAll().forEach(referencePointDataTitledPane::addToBlueListView);
-            }
-        });
+
     }
 
     public void unloadData() {
         navaidService.deleteAll();
         waypointService.deleteAll();
         referencePointService.deleteAll();
-
-        Platform.runLater(() -> {
-            if(navAidsTitledPane.isInitialized()) {
-                navAidsTitledPane.clearListView();
-            }
-
-            if(waypointTitledPane.isInitialized()) {
-                waypointTitledPane.clearListView();
-            }
-
-            if(referencePointDataTitledPane.isInitialized()) {
-                referencePointDataTitledPane.clearListViews();
-            }
-        });
     }
 
     private <T extends NavFix> List<T> filterByRegion(List<T> fixes, RegionBorder border) {

@@ -2,6 +2,8 @@ package moe.ofs.addon.navdata;
 
 import moe.ofs.backend.Configurable;
 
+import moe.ofs.backend.repositories.PlayerInfoRepository;
+
 /**
  * Read use defined data from dcs write path
  * The format of the data should be either in json or in xml
