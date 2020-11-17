@@ -1,0 +1,321 @@
+@import 'color-scheme';
+
+.dark {
+  background-color: #35495e;
+}
+
+.text-center {
+  text-align: center;
+}
+
+span, div {
+  color: whitesmoke;
+}
+
+.main-panel-container {
+  height: 100vh;
+
+  //border: 1px solid #eee;
+
+  .main-panel-side-menu {
+    height: 100%;
+  }
+
+  .main-panel-view {
+    margin: 10px 40px 10px 10px;
+    padding: 0;
+  }
+}
+
+.el-textarea {
+  margin: auto;
+  .el-textarea__inner {
+
+    color: whitesmoke;
+    background-color: $primary_light;
+    border: 1px solid $secondary_light;
+    border-radius: 0;
+    //min-height: 600px;
+    //height: 600px;
+  }
+}
+
+.el-input {
+  .el-input__inner {
+    color: whitesmoke;
+    background-color: $primary_light;
+    border: 0;
+    border-radius: 0;
+  }
+}
+
+.el-scrollbar {
+  ::-webkit-scrollbar {
+    width: 0;
+    background: transparent; /* make scrollbar transparent */
+  }
+
+  .el-scrollbar__wrap {
+    overflow-x: hidden;
+    margin: 0 !important;
+
+    .el-scrollbar__view {
+      overflow-x: hidden;
+    }
+  }
+
+  &:hover,
+  &:active,
+  &:focus {
+    .el-scrollbar__bar {
+      opacity: 1;
+      transition: opacity 340ms ease-out;
+
+      //background-color: whitesmoke;
+      //.el-scrollbar__thumb {
+      //  background-color: $primary_dark;
+      //}
+    }
+  }
+
+  overflow: hidden;
+}
+
+.el-collapse {
+  border-top: 1px solid $accent;
+  border-bottom: 1px solid $accent;
+
+  .el-collapse-item {
+
+    div[role="tab"] {
+      .el-collapse-item__header {
+        border-bottom: 1px solid $accent;
+        background: $primary_light;
+        color: whitesmoke;
+
+        span {
+
+        }
+
+      }
+    }
+
+    div[role="tabpanel"] {
+      background: $primary_light;
+    }
+
+    .el-collapse-item__wrap {
+      .el-collapse-item__content {
+
+      }
+    }
+  }
+}
+
+.el-button, .el-button:focus {
+  border: none;
+  border-radius: 0;
+  background-color: #f7b500 ;
+
+  //margin-right: 5px;
+
+  &:last-of-type {
+    margin-right: 0;
+  }
+
+  &:hover {
+    background-color: lighten($accent, 10);
+  }
+
+  &:active {
+    background-color: lighten($accent, 10);
+  }
+
+  &.is-disabled {
+    background-color: $primary_dark !important;
+  }
+
+  &.el-button--default, &.el-button--text {
+    background-color: $accent;
+    border-radius: 0;
+    border: none;
+
+    &:hover {
+      background-color: lighten($accent, 5);
+      span {
+        color: whitesmoke;
+      }
+    }
+
+    &:active {
+      background-color: lighten($accent, 20);
+      span {
+        color: whitesmoke;
+      }
+    }
+  }
+
+  &.el-button--text {
+    background-color: transparent;
+    padding: 0;
+    &:hover {
+      background-color: transparent;
+      span {
+        color: whitesmoke;
+      }
+    }
+
+    &:active {
+      background-color: transparent;
+      span {
+        color: whitesmoke;
+      }
+    }
+  }
+
+  &.el-button--primary {
+    background-color: $accent;
+
+    &:hover {
+      span {
+        color: whitesmoke;
+      }
+    }
+
+    span {
+      color: whitesmoke;
+    }
+  }
+
+  &.el-button--warning {
+    background-color: $accent;
+
+    &:hover {
+      span {
+        color: whitesmoke;
+      }
+    }
+
+    span {
+      color: whitesmoke;
+    }
+  }
+}
+
+.el-radio {
+  border: 1px solid #f7b500;
+  border-radius: 0;
+
+  color: whitesmoke;
+
+  &.is-checked {
+
+    .el-radio__inner {
+      border-color: #f7b500;
+      background: #f7b500;
+    }
+
+    .el-radio__label {
+      color: #f7b500;
+    }
+  }
+}
+
+.el-message {
+  border-radius: 0 !important;
+  background-color: $primary_dark !important;
+  border: 1px solid $primary_light !important;
+
+  .el-message__icon {
+    display: none;
+  }
+  .el-message__content {
+    color: whitesmoke !important;
+    width: 100%;
+
+    &::before {
+      width: 6px;
+      height: 100%;
+      background-color: #d8d8d8;
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+  }
+}
+
+.el-message--info {
+  .el-message__content {
+    &::before {
+      background-color: #42b983;
+    }
+  }
+}
+
+.el-form {
+  .el-form-item {
+    label {
+      color: whitesmoke;
+    }
+  }
+}
+
+.el-menu-vertical {
+  ::v-deep .el-menu-item {
+    &:hover {
+      background-color: #42b983;
+    }
+  }
+}
+
+.el-dialog {
+  background-color: $primary_dark !important;
+  color: whitesmoke;
+
+  .el-dialog__title {
+    color: whitesmoke;
+    font-weight: bold;
+  }
+
+  .el-dialog__header {
+
+  }
+
+  .el-dialog__body {
+
+  }
+}
+
+.el-popper {
+  background: $primary_dark !important;
+
+  border: 1px solid whitesmoke !important;
+  border-radius: 0 !important;
+
+  .el-dropdown-menu__item {
+    color: whitesmoke;
+    font-family: sans-serif;
+  }
+
+}
+
+.sp-10 {
+  width: 100%;
+  height: 10px;
+}
+
+.common-wrapper {
+  .title-wrapper {
+    .title {
+      font-weight: bold;
+    }
+
+    margin-bottom: 10px;
+  }
+  .content-wrapper {
+    .content {
+
+    }
+  }
+}
