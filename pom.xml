@@ -48,7 +48,7 @@
                 <executions>
                     <execution>
                         <id>exec-npm-install</id>
-                        <phase>prepare-package</phase>
+                        <phase>validate</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
@@ -63,7 +63,7 @@
 
                     <execution>
                         <id>exec-npm-run-build</id>
-                        <phase>prepare-package</phase>
+                        <phase>validate</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
@@ -87,7 +87,7 @@
                 <executions>
                     <execution>
                         <id>copy-spring-boot-webapp</id>
-                        <phase>prepare-package</phase>
+                        <phase>validate</phase>
                         <goals>
                             <goal>copy-resources</goal>
                         </goals>
@@ -110,7 +110,12 @@
                 <version>0.0.1-SNAPSHOT</version>
                 <executions>
                     <execution>
+                        <configuration>
+                            <webContentPath>web</webContentPath>
+                            <webFrameworkMode>Vue</webFrameworkMode>
+                        </configuration>
                         <goals>
+                            <goal>web-builder</goal>
                             <goal>plugin-builder</goal>
                         </goals>
                     </execution>

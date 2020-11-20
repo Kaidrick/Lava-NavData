@@ -3,9 +3,10 @@ import App from './App.vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
 import router from './router'
 import i18n from './i18n'
+import 'element-ui/lib/theme-chalk/index.css';
+import '@/assets/style/base.scss';
 
 Vue.config.productionTip = false;
 
