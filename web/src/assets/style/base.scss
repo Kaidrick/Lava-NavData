@@ -35,6 +35,18 @@ span, div {
   }
 }
 
+.el-loading-mask {
+  background-color: transparentize($primary_dark, 0.05) !important;
+
+  .el-loading-spinner {
+    .circular {
+      circle {
+        stroke: #42b983;
+      }
+    }
+  }
+}
+
 .el-textarea {
   margin: auto;
   .el-textarea__inner {
@@ -60,6 +72,25 @@ span, div {
     background-color: $primary;
     border: none;
     border-radius: 0;
+  }
+}
+
+.el-select {
+  .el-input {
+    border-radius: 0;
+    .el-input__inner {
+      border-radius: 0 !important;
+    }
+  }
+}
+
+.el-select-dropdown {
+  .el-select-dropdown__item {
+
+  }
+
+  .el-select-dropdown__item.hover {
+    background-color: #42b983;
   }
 }
 
@@ -335,6 +366,46 @@ span, div {
     font-family: sans-serif;
   }
 
+}
+
+.el-pagination {
+  color: whitesmoke;
+
+  .btn-prev, .btn-next {
+    background-color: $primary;
+    color: whitesmoke;
+
+    &:disabled {
+      color: $primary_dark;
+      background-color: $primary;
+    }
+
+    &:hover {
+      color: #f7b500;
+    }
+  }
+
+  .el-pager {
+    background-color: $primary;
+
+    .active {
+      color: #f7b500;
+    }
+
+    li {
+      background-color: $primary_dark;
+
+      &.btn-quickprev, &.btn-quicknext {
+        color: whitesmoke;
+      }
+
+      &:hover {
+        color: #f7b500;
+      }
+    }
+
+
+  }
 }
 
 .sp-10 {

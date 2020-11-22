@@ -2,10 +2,10 @@
   <div id="app">
     <el-tabs class="option-tabs">
       <el-tab-pane label="Navigational Aids">
-        <navigational-aids/>
+        <nav-fix-query service="getNavaidsPage"/>
       </el-tab-pane>
       <el-tab-pane label="Waypoints">
-        <waypoints/>
+        <nav-fix-query service="getWaypointsPage"/>
       </el-tab-pane>
       <el-tab-pane label="Supplementary Data">
         <supplementary-data-manager/>
@@ -49,10 +49,9 @@
 }
 </style>
 <script>
-import NavigationalAids from "@/components/NavigationalAids";
-import Waypoints from "@/components/Waypoints";
+import NavFixQuery from "@/components/NavFixQuery";
 import SupplementaryDataManager from "@/components/SupplementaryDataManager";
 export default {
-  components: {SupplementaryDataManager, Waypoints, NavigationalAids}
+  components: {SupplementaryDataManager, NavFixQuery}
 }
 </script>
