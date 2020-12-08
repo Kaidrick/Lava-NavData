@@ -1,5 +1,7 @@
 package moe.ofs.addon.navdata.controllers;
 
+import cn.hutool.core.util.CharsetUtil;
+import cn.hutool.http.HttpUtil;
 import moe.ofs.addon.navdata.domain.Navaid;
 import moe.ofs.addon.navdata.domain.NavaidPageObject;
 import moe.ofs.addon.navdata.domain.Waypoint;
@@ -39,5 +41,10 @@ public class NavDataController {
     PageVo<Waypoint> getWaypointsByKeyword(@RequestBody WaypointPageObject pageObject) {
         return pageObject.getKeyword() != null ? waypointService.findPageByKeyword(pageObject) :
                 waypointService.findPage(pageObject) ;
+    }
+
+    @PostMapping("test/test")
+    public String testHutool() {
+        return HttpUtil.get("https://www.baidu.com", CharsetUtil.CHARSET_UTF_8);
     }
 }

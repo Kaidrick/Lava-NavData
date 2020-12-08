@@ -30,7 +30,6 @@ public class NavDataProvider implements Plugin {
     public NavDataProvider(RequestTransmissionService requestTransmissionService, DataManager manager) {
         this.requestTransmissionService = requestTransmissionService;
         this.manager = manager;
-
     }
 
     @Override
