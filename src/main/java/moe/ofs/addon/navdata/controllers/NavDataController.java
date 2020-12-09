@@ -8,6 +8,7 @@ import moe.ofs.addon.navdata.domain.Waypoint;
 import moe.ofs.addon.navdata.domain.WaypointPageObject;
 import moe.ofs.addon.navdata.services.NavaidService;
 import moe.ofs.addon.navdata.services.WaypointService;
+import moe.ofs.backend.http.annotations.IgnoreResponseAdvice;
 import moe.ofs.backend.pagination.PageVo;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,6 +45,7 @@ public class NavDataController {
     }
 
     @PostMapping("test/test")
+    @IgnoreResponseAdvice
     public String testHutool() {
         return HttpUtil.get("https://www.baidu.com", CharsetUtil.CHARSET_UTF_8);
     }
