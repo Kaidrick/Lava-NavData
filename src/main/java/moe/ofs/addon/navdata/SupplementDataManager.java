@@ -1,8 +1,7 @@
 package moe.ofs.addon.navdata;
 
-import moe.ofs.backend.Configurable;
 
-import moe.ofs.backend.repositories.PlayerInfoRepository;
+import moe.ofs.backend.connector.Configurable;
 
 /**
  * Read use defined data from dcs write path

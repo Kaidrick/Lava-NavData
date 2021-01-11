@@ -4,8 +4,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import moe.ofs.backend.object.map.GeoPosition;
-import moe.ofs.backend.object.map.GeoPositions;
+import moe.ofs.backend.domain.dcs.theater.GeoPosition;
+import moe.ofs.backend.domain.dcs.theater.GeoPositions;
 
 import java.io.Serializable;
 

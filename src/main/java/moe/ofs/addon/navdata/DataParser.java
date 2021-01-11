@@ -2,7 +2,7 @@ package moe.ofs.addon.navdata;
 
 import moe.ofs.addon.navdata.domain.Navaid;
 import moe.ofs.addon.navdata.domain.Waypoint;
-import moe.ofs.backend.object.map.GeoPosition;
+import moe.ofs.backend.domain.dcs.theater.GeoPosition;
 
 import java.io.BufferedReader;
 import java.io.IOException;

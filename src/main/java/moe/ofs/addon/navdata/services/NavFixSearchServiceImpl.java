@@ -2,8 +2,8 @@ package moe.ofs.addon.navdata.services;
 
 import moe.ofs.addon.navdata.domain.NavFix;
 import moe.ofs.addon.navdata.domain.Waypoint;
-import moe.ofs.backend.object.map.GeoPosition;
-import moe.ofs.backend.object.map.ReferencePoint;
+import moe.ofs.backend.domain.dcs.theater.GeoPosition;
+import moe.ofs.backend.domain.dcs.theater.ReferencePoint;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;

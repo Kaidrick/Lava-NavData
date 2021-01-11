@@ -1,7 +1,8 @@
 package moe.ofs.addon.navdata.services;
 
-import moe.ofs.backend.object.map.ReferencePoint;
-import moe.ofs.backend.services.CrudService;
+
+import moe.ofs.backend.common.CrudService;
+import moe.ofs.backend.domain.dcs.theater.ReferencePoint;
 
 public interface ReferencePointService extends CrudService<ReferencePoint> {
 

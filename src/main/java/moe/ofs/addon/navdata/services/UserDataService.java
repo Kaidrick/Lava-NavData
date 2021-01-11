@@ -1,7 +1,7 @@
 package moe.ofs.addon.navdata.services;
 
 import moe.ofs.addon.navdata.domain.NavFix;
-import moe.ofs.backend.services.CrudService;
+import moe.ofs.backend.common.CrudService;
 
 import java.util.List;
 

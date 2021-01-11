@@ -173,7 +173,6 @@
             <groupId>moe.ofs</groupId>
             <artifactId>backend-core</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-            <classifier>addon-dependency</classifier>
         </dependency>
 
         <dependency>

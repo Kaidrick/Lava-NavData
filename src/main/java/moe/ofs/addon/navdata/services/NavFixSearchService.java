@@ -1,7 +1,7 @@
 package moe.ofs.addon.navdata.services;
 
 import moe.ofs.addon.navdata.domain.NavFix;
-import moe.ofs.backend.object.map.ReferencePoint;
+import moe.ofs.backend.domain.dcs.theater.ReferencePoint;
 
 import java.util.Set;
 

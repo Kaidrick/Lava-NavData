@@ -10,7 +10,7 @@ import moe.ofs.addon.navdata.services.NavaidService;
 import moe.ofs.addon.navdata.services.ReferencePointService;
 import moe.ofs.addon.navdata.services.UserDataService;
 import moe.ofs.addon.navdata.services.WaypointService;
-import moe.ofs.backend.Configurable;
+import moe.ofs.backend.connector.Configurable;
 import moe.ofs.backend.function.refpoint.ReferencePointManager;
 import org.springframework.stereotype.Component;
 
