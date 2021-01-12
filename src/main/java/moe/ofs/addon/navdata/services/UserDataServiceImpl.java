@@ -1,7 +1,7 @@
 package moe.ofs.addon.navdata.services;
 
 import moe.ofs.addon.navdata.domain.NavFix;
-import moe.ofs.backend.services.map.AbstractMapService;
+import moe.ofs.backend.common.AbstractMapService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

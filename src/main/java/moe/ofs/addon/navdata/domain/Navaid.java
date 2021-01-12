@@ -1,8 +1,8 @@
 package moe.ofs.addon.navdata.domain;
 
 import lombok.*;
-import moe.ofs.backend.object.map.GeoPosition;
-import moe.ofs.backend.object.map.GeoPositions;
+import moe.ofs.backend.domain.dcs.theater.GeoPosition;
+import moe.ofs.backend.domain.dcs.theater.GeoPositions;
 
 import java.io.Serializable;
 import java.util.Objects;
