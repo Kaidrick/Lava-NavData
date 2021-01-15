@@ -1,6 +1,9 @@
 package moe.ofs.addon.navdata.domain;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import moe.ofs.backend.domain.dcs.BaseEntity;
 import moe.ofs.backend.domain.dcs.theater.GeoPosition;
 
